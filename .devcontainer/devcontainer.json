@@ -1,0 +1,13 @@
+{
+  "name": "Common Repo Services",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/Common_Repo",
+  "runArgs": ["--service-ports"],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "postStartCommand": "bash .devcontainer/scripts/ensure-ollama-model.sh || true",
+  "forwardPorts": [11434, 5432, 8978],
+  "remoteUser": "vscode"
+}

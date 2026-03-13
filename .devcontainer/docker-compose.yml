@@ -1,0 +1,71 @@
+services:
+  workspace:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    command: sleep infinity
+    depends_on:
+      ollama:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      cloudbeaver:
+        condition: service_started
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - TZ=Asia/Seoul
+    volumes:
+      - ..:/workspaces/Common_Repo:cached
+    networks:
+      - common-network
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    networks:
+      - common-network
+
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - TZ=Asia/Seoul
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - common-network
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    ports:
+      - "8978:8978"
+    volumes:
+      - cloudbeaver-workspace:/opt/cloudbeaver/workspace
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - common-network
+
+volumes:
+  ollama-data:
+  pgdata:
+  cloudbeaver-workspace:
+
+networks:
+  common-network:
+    driver: bridge
