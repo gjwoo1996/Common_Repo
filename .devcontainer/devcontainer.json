@@ -7,6 +7,9 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
   "postStartCommand": "bash .devcontainer/scripts/ensure-ollama-model.sh || true",
   "forwardPorts": [11434, 5432, 8978],
   "remoteUser": "vscode"
