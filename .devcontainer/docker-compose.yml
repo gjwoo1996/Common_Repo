@@ -16,6 +16,7 @@ services:
       - ..:/workspaces/Common_Repo:cached
     networks:
       - common-network
+    restart: unless-stopped
 
   ollama:
     image: ollama/ollama
@@ -28,6 +29,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
     networks:
       - common-network
+    restart: unless-stopped
 
   postgres:
     image: postgres:16
@@ -48,6 +50,7 @@ services:
       start_period: 10s
     networks:
       - common-network
+    restart: unless-stopped
 
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest
@@ -60,6 +63,7 @@ services:
         condition: service_healthy
     networks:
       - common-network
+    restart: unless-stopped
 
 volumes:
   ollama-data:
