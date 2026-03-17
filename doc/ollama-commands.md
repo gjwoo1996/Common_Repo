@@ -32,9 +32,15 @@ docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer e
 
 ## 2. 자연어로 모델에 보내서 응답 받기 테스트
 
+자동 설치 모델: `qwen2.5:7b`, `exaone3.5:7.8b` (한국어 추천)
+
 ### API (컨테이너 내부)
 
 ```bash
+# exaone3.5:7.8b (기본, 한국어 강함)
+curl -s http://ollama:11434/api/generate -d '{"model":"exaone3.5:7.8b","prompt":"한 줄로 인사해줘.","stream":false}'
+
+# qwen2.5:7b
 curl -s http://ollama:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"한 줄로 인사해줘.","stream":false}'
 ```
 
@@ -45,7 +51,7 @@ curl -s http://ollama:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"한
 위 명령에서 URL만 `http://localhost:11434` 로 바꿉니다.
 
 ```bash
-curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"한 줄로 인사해줘.","stream":false}'
+curl -s http://localhost:11434/api/generate -d '{"model":"exaone3.5:7.8b","prompt":"한 줄로 인사해줘.","stream":false}'
 ```
 
 ### CLI (exec)
@@ -53,6 +59,10 @@ curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"
 프롬프트를 바꿔가며 자연어 테스트할 수 있습니다.
 
 ```bash
+# exaone3.5:7.8b
+docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run exaone3.5:7.8b "한 줄로 인사해줘."
+
+# qwen2.5:7b
 docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run qwen2.5:7b "한 줄로 인사해줘."
 ```
 
@@ -85,3 +95,14 @@ docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer l
 | 모델 목록      | `bash .devcontainer/scripts/ollama-list.sh` |
 | 자연어 테스트  | `bash .devcontainer/scripts/ollama-test.sh` 또는 `bash .devcontainer/scripts/ollama-test.sh "질문할 문장"` |
 | Ollama 로그    | `bash .devcontainer/scripts/ollama-logs.sh` |
+
+### ollama-test.sh 모델 선택
+
+첫 번째 인자가 `:` 포함 모델명이면 해당 모델 사용, 없으면 기본 `exaone3.5:7.8b` 사용.
+
+```bash
+ollama-test.sh                           # exaone3.5:7.8b, 기본 프롬프트
+ollama-test.sh "날씨 어때?"              # exaone3.5:7.8b, "날씨 어때?"
+ollama-test.sh qwen2.5:7b "날씨 어때?"   # qwen2.5:7b, "날씨 어때?"
+ollama-test.sh exaone3.5:7.8b "날씨 어때?" # exaone3.5:7.8b, "날씨 어때?"
+```

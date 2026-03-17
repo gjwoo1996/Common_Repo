@@ -28,7 +28,7 @@
    docker compose -f .devcontainer/docker-compose.yml up -d
    ```
 
-3. 컨테이너가 뜨면 Ollama에 `qwen2.5:7b` 모델이 없을 때만 자동으로 설치됩니다.  
+3. 컨테이너가 뜨면 Ollama에 `qwen2.5:7b`, `exaone3.5:7.8b` 모델이 없을 때만 자동으로 설치됩니다.  
    (이미 있으면 스킵되므로 재시작 시 재설치되지 않습니다.)
 
 ## 접속 정보
@@ -52,7 +52,7 @@ Common_Repo 스택을 먼저 띄운 뒤, 다른 프로젝트 devcontainer에서 
 
 ## 추가 Ollama 모델
 
-컨테이너 안에서:
+기본 설치: `qwen2.5:7b`, `exaone3.5:7.8b`. 그 외 모델은 컨테이너 안에서:
 
 ```bash
 docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec ollama ollama pull <모델명>
