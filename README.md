@@ -90,3 +90,6 @@ docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer e
 
 - Docker (및 Docker Compose)
 - Ollama GPU 사용 시: NVIDIA Container Toolkit (`runtime: nvidia` 사용 중)
+
+
+test
