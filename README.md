@@ -1,7 +1,7 @@
 # Common_Repo
 
 공통 개발 서비스(LLM, PostgreSQL, CloudBeaver)를 제공하는 devcontainer 스택입니다.  
-다른 프로젝트의 devcontainer에서 이 스택의 서비스를 `host.docker.internal`로 접속해 사용할 수 있습니다.
+다른 프로젝트의 devcontainer에서 이 스택의 서비스를 `host.docker.internal` 또는 공유 Docker 네트워크로 접속해 사용할 수 있습니다.
 
 ## 제공 서비스
 
@@ -49,6 +49,36 @@ Common_Repo 스택을 먼저 띄운 뒤, 다른 프로젝트 devcontainer에서 
 
 예: 다른 프로젝트의 `docker-compose.yml` 또는 `devcontainer.json`에  
 `OLLAMA_HOST=http://host.docker.internal:11434` 를 환경 변수로 설정하면 됩니다.
+
+### 다른 devcontainer에서 (shared network, 권장)
+
+`Common_Repo`를 실행하면 네트워크 이름 `gw-shared-devnet`이 생성됩니다.  
+다른 프로젝트에서 같은 네트워크를 `external`로 붙이면 서비스명을 직접 사용할 수 있습니다.
+
+다른 프로젝트의 `docker-compose.yml` 예시:
+
+```yaml
+services:
+  workspace:
+    # ...
+    networks:
+      - default
+      - shared-devnet
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres
+
+networks:
+  shared-devnet:
+    external: true
+    name: gw-shared-devnet
+```
+
+참고:
+
+- 기존 `host.docker.internal` 방식도 계속 동작합니다.
+- shared network를 쓰는 경우에는 `Common_Repo`가 먼저 실행되어 네트워크가 존재해야 합니다.
+- 서비스명 충돌이 있으면 각 프로젝트에서 `container_name` 또는 `aliases`로 별칭을 분리하세요.
 
 ## 추가 Ollama 모델
 

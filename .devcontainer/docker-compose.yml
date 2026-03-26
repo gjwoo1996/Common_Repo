@@ -72,4 +72,5 @@ volumes:
 
 networks:
   common-network:
+    name: gw-shared-devnet
     driver: bridge
