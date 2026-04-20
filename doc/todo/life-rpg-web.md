@@ -1,7 +1,7 @@
 현재 모델
-    qwen2.5:7b, exaone3.5:7.8b
+    qwen3:8b, qwen2.5:7b, llava:7b
 
 추천 모델
-1️⃣ exaone-3.5:7.8b (한국어 매우 강함)\
-2️⃣ qwen2.5:14b (7b보다 안정적)\
-3️⃣ deepseek-r1-distill-qwen (분석 작업에 좋음)
+1️⃣ qwen3:8b (기본 텍스트 응답)\
+2️⃣ qwen2.5:7b (안정적 폴백)\
+3️⃣ llava:7b (이미지 입력 분석)

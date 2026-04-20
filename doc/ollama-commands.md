@@ -32,16 +32,23 @@ docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer e
 
 ## 2. 자연어로 모델에 보내서 응답 받기 테스트
 
-자동 설치 모델: `qwen2.5:7b`, `exaone3.5:7.8b` (한국어 추천)
+자동 설치 모델: `qwen3:8b`, `qwen2.5:7b`, `llava:7b`
+
+- 일본어 학습 어시스트 기본 추천: `qwen3:8b`
+- 안정적 백업 모델: `qwen2.5:7b`
+- 이미지 입력 분석용: `llava:7b`
 
 ### API (컨테이너 내부)
 
 ```bash
-# exaone3.5:7.8b (기본, 한국어 강함)
-curl -s http://ollama:11434/api/generate -d '{"model":"exaone3.5:7.8b","prompt":"한 줄로 인사해줘.","stream":false}'
+# qwen3:8b (기본, 일본어 학습 추천)
+curl -s http://ollama:11434/api/generate -d '{"model":"qwen3:8b","prompt":"한 줄로 인사해줘.","stream":false}'
 
 # qwen2.5:7b
 curl -s http://ollama:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"한 줄로 인사해줘.","stream":false}'
+
+# llava:7b
+curl -s http://ollama:11434/api/generate -d '{"model":"llava:7b","prompt":"한 줄로 인사해줘.","stream":false}'
 ```
 
 응답 JSON의 `response` 필드에 모델 출력이 담깁니다.
@@ -51,7 +58,7 @@ curl -s http://ollama:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"한
 위 명령에서 URL만 `http://localhost:11434` 로 바꿉니다.
 
 ```bash
-curl -s http://localhost:11434/api/generate -d '{"model":"exaone3.5:7.8b","prompt":"한 줄로 인사해줘.","stream":false}'
+curl -s http://localhost:11434/api/generate -d '{"model":"qwen3:8b","prompt":"한 줄로 인사해줘.","stream":false}'
 ```
 
 ### CLI (exec)
@@ -59,11 +66,14 @@ curl -s http://localhost:11434/api/generate -d '{"model":"exaone3.5:7.8b","promp
 프롬프트를 바꿔가며 자연어 테스트할 수 있습니다.
 
 ```bash
-# exaone3.5:7.8b
-docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run exaone3.5:7.8b "한 줄로 인사해줘."
+# qwen3:8b
+docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run qwen3:8b "한 줄로 인사해줘."
 
 # qwen2.5:7b
 docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run qwen2.5:7b "한 줄로 인사해줘."
+
+# llava:7b
+docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec -T ollama ollama run llava:7b "한 줄로 인사해줘."
 ```
 
 다른 문장으로 테스트할 때는 마지막 인자만 변경하면 됩니다.
@@ -98,11 +108,12 @@ docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer l
 
 ### ollama-test.sh 모델 선택
 
-첫 번째 인자가 `:` 포함 모델명이면 해당 모델 사용, 없으면 기본 `exaone3.5:7.8b` 사용.
+첫 번째 인자가 `:` 포함 모델명이면 해당 모델 사용, 없으면 기본 `qwen3:8b` 사용.
 
 ```bash
-ollama-test.sh                           # exaone3.5:7.8b, 기본 프롬프트
-ollama-test.sh "날씨 어때?"              # exaone3.5:7.8b, "날씨 어때?"
+ollama-test.sh                           # qwen3:8b, 기본 프롬프트
+ollama-test.sh "날씨 어때?"              # qwen3:8b, "날씨 어때?"
+ollama-test.sh qwen3:8b "JLPT N4 문법 설명해줘" # qwen3:8b, 일본어 학습 테스트
 ollama-test.sh qwen2.5:7b "날씨 어때?"   # qwen2.5:7b, "날씨 어때?"
-ollama-test.sh exaone3.5:7.8b "날씨 어때?" # exaone3.5:7.8b, "날씨 어때?"
+ollama-test.sh llava:7b "이미지를 어떻게 설명해?" # llava:7b, 간단 테스트
 ```
