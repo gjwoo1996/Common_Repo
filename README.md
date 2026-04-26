@@ -28,7 +28,7 @@
    docker compose -f .devcontainer/docker-compose.yml up -d
    ```
 
-3. 컨테이너가 뜨면 Ollama에 `qwen3:8b`, `qwen2.5:7b`, `llava:7b` 모델이 없을 때만 자동으로 설치됩니다.
+3. 컨테이너가 뜨면 Ollama에 `qwen3:8b`, `qwen2.5:7b`, `qwen2.5vl:7b` 모델이 없을 때만 자동으로 설치됩니다.
    (이미 있으면 스킵되므로 재시작 시 재설치되지 않습니다.)
 
 ## 접속 정보
@@ -82,7 +82,7 @@ networks:
 
 ## 추가 Ollama 모델
 
-기본 설치: `qwen3:8b`, `qwen2.5:7b`, `llava:7b`. 일본어 학습 어시스트 용도에서는 `qwen3:8b`를 기본 추천 모델로 사용하고, `llava:7b`는 이미지 입력 분석용으로 사용합니다. 그 외 모델은 컨테이너 안에서:
+기본 설치: `qwen3:8b`, `qwen2.5:7b`, `qwen2.5vl:7b`. 일본어 학습 어시스트 용도에서는 `qwen3:8b`를 기본 추천 모델로 사용하고, `qwen2.5vl:7b`는 이미지 입력(일본어 독해 지문 사진 분석, 후리가나·해석·단어 추출)에 사용합니다. 그 외 모델은 컨테이너 안에서:
 
 ```bash
 docker compose -f .devcontainer/docker-compose.yml -p common_repo_devcontainer exec ollama ollama pull <모델명>

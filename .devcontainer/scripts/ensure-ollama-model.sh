@@ -9,7 +9,7 @@ done
 COMPOSE_PROJECT_NAME="$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]')_devcontainer"
 TAGS="$(curl -s http://ollama:11434/api/tags)" || true
 
-MODELS=("qwen3:8b" "qwen2.5:7b" "llava:7b")
+MODELS=("qwen3:8b" "qwen2.5:7b" "qwen2.5vl:7b")
 for MODEL in "${MODELS[@]}"; do
   if echo "$TAGS" | grep -q "$MODEL"; then
     echo "$MODEL already installed"
